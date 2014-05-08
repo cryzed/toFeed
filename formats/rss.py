@@ -99,7 +99,7 @@ class Channel(object):
         if len(args) == 1 and not kwargs and isinstance(args[0], Item):
             self.items.add(args[0])
         else:
-            self.entries.append(Item(*args, **kwargs))
+            self.items.add(Item(*args, **kwargs))
 
     def generate(self):
         elements = Channel.ELEMENTS[:]
