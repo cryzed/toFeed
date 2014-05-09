@@ -5,7 +5,9 @@ toFeed aims to provide syndication feeds for websites that don't.
 
 Adapters
 --------
-Below the currently supported adapters and their routes are listed.
+Below the currently supported adapters and their routes are listed. All
+adapters expose a way to manually set the cache timeout by passing
+"cache_timeout" as a GET-parameter.
 
 
 Patreon:
