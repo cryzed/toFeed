@@ -5,9 +5,14 @@ import urlparse
 import bs4
 
 from toFeed.formats import rss
+from toFeed.adapters import Adapter
+
+ROUTE = 'patreon'
 
 
-class ActivityFeed(object):
+class ActivityFeed(Adapter):
+    ROUTE = 'activities'
+    CACHE_TIMEOUT = 300
     URL_TEMPLATE = 'http://www.patreon.com/%s&ty=a'
     DATETIME_FORMAT = '%B %d, %Y %H:%M:%S'
 

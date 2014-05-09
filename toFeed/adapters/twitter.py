@@ -5,9 +5,14 @@ import urllib2
 import bs4
 
 from toFeed.formats import rss
+from toFeed.adapters import Adapter
+
+ROUTE = 'twitter'
 
 
-class TimelineWidget(object):
+class TimelineWidget(Adapter):
+    ROUTE = 'timeline'
+    CACHE_TIMEOUT = 120
     URL_TEMPLATE = 'http://cdn.syndication.twimg.com/widgets/timelines/%s'
     DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S+0000'
 
