@@ -1,5 +1,7 @@
 toFeed
 ======
+![logo](http://i.imgur.com/0kbZEwI.png)
+
 toFeed aims to provide syndication feeds for websites that don't.
 
 
