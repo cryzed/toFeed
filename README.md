@@ -5,9 +5,9 @@ toFeed aims to provide syndication feeds for websites that don't.
 
 Adapters
 --------
-Parameters are passed via GET-parameters and used to instance the Adapter class
-instance. Parameters without a value are interpreted as positional arguments,
-and parameters with a value as a keyword argument.
+Parameters are passed via GET-parameters and used to instantiate the Adapter
+class instance. Parameters without a value are interpreted as positional
+arguments, and parameters with a value as a keyword argument.
 
 To write your own adapter you need to create a new module in toFeed.packages
 which has a top-level "ROUTE" attribute. This attribute is the first part
