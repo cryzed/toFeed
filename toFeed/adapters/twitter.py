@@ -1,6 +1,6 @@
+import datetime
 import json
 import urllib2
-import datetime
 
 import bs4
 

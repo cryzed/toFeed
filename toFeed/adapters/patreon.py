@@ -1,6 +1,6 @@
 import datetime
-import urlparse
 import urllib2
+import urlparse
 
 import bs4
 
