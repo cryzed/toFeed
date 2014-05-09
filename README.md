@@ -10,7 +10,7 @@ Below the currently supported adapters and their routes are listed.
 
 Patreon:
 
-  - patreon/activities?<username>
+  - patreon/activities?\<username\>
 
 
 Twitter:
