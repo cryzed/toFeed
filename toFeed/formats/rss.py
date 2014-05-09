@@ -4,8 +4,8 @@ import xml.sax.saxutils
 import jinja2
 
 
-CHANNEL_TEMPLATE = '''
-<rss version="2.0">
+JINJA2_EXTENSIONS = ['toFeed.libraries.jinja2htmlcompress.HTMLCompress']
+CHANNEL_TEMPLATE = '''<rss version="2.0">
     <channel>
         <title>{{ title }}</title>
         <link>{{ link }}</link>
@@ -34,11 +34,9 @@ CHANNEL_TEMPLATE = '''
         {{ item.generate() }}
         {% endfor %}
    </channel>
-</rss>
-'''
+</rss>'''
 
-ITEM_TEMPLATE = '''
-<item>
+ITEM_TEMPLATE = '''<item>
     <title>{{ title }}</title>
     <link>{{ link }}</link>
     <description>{{ description }}</description>
@@ -53,8 +51,7 @@ ITEM_TEMPLATE = '''
     {% if guid %}<guid>{{ guid }}</guid>{% endif %}
     {% if pub_date %}<pubDate>{{ pub_date }}</pubDate>{% endif %}
     {% if source %}<source>{{ source }}</source>{% endif %}
-</item>
-'''
+</item>'''
 
 
 def _escape_xml(string_):
@@ -108,7 +105,7 @@ class Channel(object):
         for element in elements:
             data[element] = _escape_xml(getattr(self, element))
 
-        return jinja2.Template(CHANNEL_TEMPLATE).render(data)
+        return jinja2.Template(CHANNEL_TEMPLATE, extensions=JINJA2_EXTENSIONS).render(data)
 
 
 class Item(object):
@@ -140,4 +137,4 @@ class Item(object):
         for element in elements:
             data[element] = _escape_xml(getattr(self, element))
 
-        return jinja2.Template(ITEM_TEMPLATE).render(data)
+        return jinja2.Template(ITEM_TEMPLATE, extensions=JINJA2_EXTENSIONS).render(data)
