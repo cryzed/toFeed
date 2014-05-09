@@ -12,14 +12,6 @@ cache = werkzeug.contrib.cache.SimpleCache()
 cached = {}
 
 
-def _text_to_html(string):
-    return string.replace(' ', '&nbsp;').replace('\n', '<br/>')
-
-
-def test(cache_timeout):
-    print cache_timeout
-
-
 @app.route('/<path:path>')
 def index(path):
     if not path in adapters:
