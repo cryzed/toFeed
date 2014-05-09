@@ -7,11 +7,15 @@ Adapters
 --------
 Below the currently supported adapters and their routes are listed.
 
-- Patreon
-    - patreon/activities?<username>
 
-- Twitter
-    - twitter/timeline?<data_widget_id>[&max_title_length=<max_title_length>]
+Patreon:
+
+  - patreon/activities?<username>
+
+
+Twitter:
+
+  - twitter/timeline?<data_widget_id>\[&max_title_length=\<max_title_length\>\]
 
 
 Usage
