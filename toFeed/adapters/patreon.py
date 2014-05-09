@@ -24,6 +24,7 @@ class ActivityFeed(object):
         feed = rss.Channel(title, self.url, title, pub_date=now, last_build_date=now)
 
         for activity in soup('div', {'class': 'box'})[1:]:
+            # Ignore non-public member-only activity entries
             if activity['prv'] in ['1', '100']:
                 continue
 
@@ -36,6 +37,8 @@ class ActivityFeed(object):
             if len(title) > self.max_title_length:
                 title = title[:self.max_title_length] + ' ...'
 
+            # Convert newline characters found in the content to <br/> tags,
+            # allowing various RSS readers to display the post correctly.
             contents = []
             br_tag = soup.new_tag('br')
             for content in element.contents:
@@ -54,9 +57,12 @@ class ActivityFeed(object):
 
             elif 'photo' in activity['class']:
                 element = activity.find('a', {'class': 'imagePopup'})
+
+                # Make URLs absolute
                 link = urlparse.urljoin(self.url, element['href'])
                 element['href'] = link
 
+                # Fix "src"-attribute of the contained img-tag
                 image = element.find('img')
                 image['src'] = 'http:' + image['src']
 
