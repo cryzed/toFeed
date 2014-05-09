@@ -8,7 +8,7 @@ from toFeed.formats import rss
 
 
 class ActivityFeed(object):
-    URL_TEMPLATE = 'http://www.patreon.com/user?u=%s&ty=a'
+    URL_TEMPLATE = 'http://www.patreon.com/%s&ty=a'
     DATETIME_FORMAT = '%B %d, %Y %H:%M:%S'
 
     def __init__(self, user_id, max_title_length=100):
