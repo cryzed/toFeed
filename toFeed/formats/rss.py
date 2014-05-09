@@ -42,17 +42,17 @@ ITEM_TEMPLATE = '''
     <title>{{ title }}</title>
     <link>{{ link }}</link>
     <description>{{ description }}</description>
-    {% if author %}{{ author }}{% endif %}
+    {% if author %}<author>{{ author }}</author>{% endif %}
     {% if categories %}
     {% for category in categories %}
     <category>{{ category }}</category>
     {% endfor %}
     {% endif %}
-    {% if comments %}{{ comments }}{% endif %}
-    {% if enclosure %}{{ enclosure }}{% endif %}
-    {% if guid %}{{ guid }}{% endif %}
-    {% if pubDate %}{{ pub_date }}{% endif %}
-    {% if source %}{{ source }}{% endif %}
+    {% if comments %}<comments>{{ comments }}</comments>{% endif %}
+    {% if enclosure %}<enclosure>{{ enclosure }}</enclosure>{% endif %}
+    {% if guid %}<guid>{{ guid }}</guid>{% endif %}
+    {% if pub_date %}<pubDate>{{ pub_date }}</pubDate>{% endif %}
+    {% if source %}<source>{{ source }}</source>{% endif %}
 </item>
 '''
 
@@ -80,10 +80,6 @@ class Channel(object):
         self.title = title
         self.link = link
         self.description = description
-
-        for element in Channel.REQUIRED_ELEMENTS:
-            if not getattr(self, element):
-                raise ValueError('%s is required' % element)
 
         for element in 'pub_date', 'last_build_date':
             value = kwargs.get(element)
@@ -117,9 +113,8 @@ class Channel(object):
 
 class Item(object):
     REQUIRED_ELEMENTS = ['title', 'link', 'description']
-    OPTIONAL_ELEMENTS = [
-        'author', 'categories', 'comments', 'enclosure', 'guid', 'pub_date',
-        'source']
+    OPTIONAL_ELEMENTS = ['author', 'categories', 'comments', 'enclosure',
+                         'guid', 'pub_date', 'source']
     ELEMENTS = REQUIRED_ELEMENTS + OPTIONAL_ELEMENTS
 
     def __init__(self, title, link, description, **kwargs):
@@ -127,9 +122,9 @@ class Item(object):
         self.link = link
         self.description = description
 
-        for element in Channel.REQUIRED_ELEMENTS:
-            if not getattr(self, element):
-                raise ValueError('%s is required' % element)
+        pub_date = kwargs.get('pub_date')
+        if pub_date:
+            kwargs['pub_date'] = _format_rfc_822(pub_date)
 
         for element in Item.OPTIONAL_ELEMENTS:
             setattr(self, element, kwargs.get(element))
