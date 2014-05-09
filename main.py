@@ -12,15 +12,18 @@ cache = werkzeug.contrib.cache.SimpleCache()
 cached = {}
 
 
+def _text_to_html(string):
+    return string.replace(' ', '&nbsp;').replace('\n', '<br/>')
+
+
+def test(cache_timeout):
+    print cache_timeout
+
+
 @app.route('/<path:path>')
 def index(path):
     if not path in adapters:
         return 'No matching adapter found', 404
-
-    adapter = adapters[path]
-    if flask.request.full_path in cached:
-        if time.time() - cached[flask.request.full_path] < adapter.CACHE_TIMEOUT:
-            return cache.get(flask.request.full_path)
 
     args = []
     kwargs = {}
@@ -31,8 +34,11 @@ def index(path):
         kwargs[key] = value
 
     instance = adapters[path](*args, **kwargs)
-    feed = instance.to_feed()
+    if flask.request.full_path in cached:
+        if time.time() - cached[flask.request.full_path] < instance.cache_timeout:
+            return cache.get(flask.request.full_path)
 
+    feed = instance.to_feed()
     cache.set(flask.request.full_path, feed)
     cached[flask.request.full_path] = time.time()
     return feed

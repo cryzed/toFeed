@@ -12,11 +12,11 @@ ROUTE = 'twitter'
 
 class TimelineWidget(Adapter):
     ROUTE = 'timeline'
-    CACHE_TIMEOUT = 120
     URL_TEMPLATE = 'http://cdn.syndication.twimg.com/widgets/timelines/%s'
     DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S+0000'
 
-    def __init__(self, data_widget_id):
+    def __init__(self, data_widget_id, **kwargs):
+        Adapter.__init__(self, **kwargs)
         self.url = TimelineWidget.URL_TEMPLATE % data_widget_id
 
     def to_feed(self):

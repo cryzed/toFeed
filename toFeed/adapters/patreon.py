@@ -12,11 +12,11 @@ ROUTE = 'patreon'
 
 class ActivityFeed(Adapter):
     ROUTE = 'activities'
-    CACHE_TIMEOUT = 300
     URL_TEMPLATE = 'http://www.patreon.com/%s&ty=a'
     DATETIME_FORMAT = '%B %d, %Y %H:%M:%S'
 
-    def __init__(self, username, max_title_length=100):
+    def __init__(self, username, max_title_length=100, **kwargs):
+        Adapter.__init__(self, **kwargs)
         self.url = ActivityFeed.URL_TEMPLATE % username
         self.max_title_length = max_title_length
 

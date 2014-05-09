@@ -5,14 +5,16 @@ import importlib
 ADAPTERS_PACKAGE_PATH = 'toFeed.adapters'
 
 
-# Dummy class, currently only used to detect adapter classes. All adapters
-# need to inherit this base class.
+# All adapters need to inherit this base class.
 class Adapter(object):
-    ROUTE = None
-    CACHE_TIMEOUT = 120
+    ROUTE = ''
+    CACHE_TIMEOUT = '120'
+
+    def __init__(self, cache_timeout=CACHE_TIMEOUT):
+        self.cache_timeout = int(cache_timeout)
 
     def to_feed(self):
-        pass
+        return ''
 
 
 # Returns true if object is a class which inherits from the adapter base class
