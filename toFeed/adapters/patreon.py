@@ -16,8 +16,8 @@ class ActivityFeed(Adapter):
     URL_TEMPLATE = 'http://www.patreon.com/%s&ty=a'
     DATETIME_FORMAT = '%B %d, %Y %H:%M:%S'
 
-    def __init__(self, user_id, max_title_length=100):
-        self.url = ActivityFeed.URL_TEMPLATE % user_id
+    def __init__(self, username, max_title_length=100):
+        self.url = ActivityFeed.URL_TEMPLATE % username
         self.max_title_length = max_title_length
 
     def to_feed(self):
