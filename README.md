@@ -1,7 +1,7 @@
 <div align="center">
 <img src="http://i.imgur.com/0kbZEwI.png"/>
 <p>toFeed aims to provide syndication feeds for websites that don't.</p>
-</p>
+</div>
 
 
 Adapters
