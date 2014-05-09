@@ -1,8 +1,7 @@
-toFeed
-======
-![logo](http://i.imgur.com/0kbZEwI.png)
-
-toFeed aims to provide syndication feeds for websites that don't.
+<div align="center">
+<img src="http://i.imgur.com/0kbZEwI.png"/>
+<p>toFeed aims to provide syndication feeds for websites that don't.</p>
+</p>
 
 
 Adapters
