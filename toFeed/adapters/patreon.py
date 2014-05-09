@@ -27,8 +27,9 @@ class ActivityFeed(object):
             if activity['prv'] in ['1', '100']:
                 continue
 
-            pub_date = list(activity.find('p', {'class': 'dateBox'}).stripped_strings)[0]
-            pub_date = datetime.datetime.strptime(pub_date, ActivityFeed.DATETIME_FORMAT)
+            pub_date = datetime.datetime.strptime(
+                list(activity.find('p', {'class': 'dateBox'}).stripped_strings)[0],
+                ActivityFeed.DATETIME_FORMAT)
 
             element = activity.find('div', {'class': 'shareContent'})
             title = ' '.join(list(element.stripped_strings))
