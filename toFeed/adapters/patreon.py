@@ -46,7 +46,7 @@ class ActivityFeed(object):
                 else:
                     contents.append(content)
             element.contents = contents
-            description = str(element)
+            description = unicode(element)
 
             link = None
             if 'note' in activity['class']:
@@ -60,7 +60,7 @@ class ActivityFeed(object):
                 image = element.find('img')
                 image['src'] = 'http:' + image['src']
 
-                description = str(element) + '<br/>' + description
+                description = unicode(element) + '<br/>' + description
 
             author = list(activity.find('p', {'class': 'info'}).stripped_strings)[0]
             feed.add(title, link, description, author=author, guid=link, pub_date=pub_date)
