@@ -11,7 +11,7 @@ ROUTE = 'twitter'
 
 
 class TimelineWidget(Adapter):
-    ROUTE = 'timeline'
+    ROUTE = 'timelineWidget'
     URL_TEMPLATE = 'http://cdn.syndication.twimg.com/widgets/timelines/%s'
     DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S+0000'
 

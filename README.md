@@ -49,7 +49,7 @@ parameters they accept:
 
 [Twitter](http://twitter.com/):
 
-  - twitter/timeline?\<data_widget_id\>
+  - twitter/timelineWidget?\<data_widget_id\>
 
     Turns the timeline widget data stream into an RSS feed. To retrieve the
     data widget id you need to access your Twitter settings, create a new
