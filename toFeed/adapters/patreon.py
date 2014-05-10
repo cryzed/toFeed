@@ -12,6 +12,7 @@ ROUTE = 'patreon'
 
 class ActivityFeed(Adapter):
     ROUTE = 'activities'
+    PRIMARY = True
     URL_TEMPLATE = 'http://www.patreon.com/%s&ty=a'
     DATETIME_FORMAT = '%B %d, %Y %H:%M:%S'
 

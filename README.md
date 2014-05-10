@@ -15,7 +15,9 @@ which has a top-level "ROUTE" attribute. This attribute is the first part
 of the route to your actual adapter class. All classes which inherit from the
 base adapter class in this module are automatically recognized. Your class
 needs to provide a static "ROUTE" attribute as well, which is the second part
-of the route to your adapter: for example "twitter/timeline".
+of the route to your adapter: for example "twitter/timeline". If the static
+"PRIMARY" attribute in your adapter class is set to true, it will also be
+accessible simply via the module "ROUTE" attribute, i.e. only "twitter".
 
 You need to add "\*\*kwargs" to the argument list and call this in your
 constructor:
@@ -36,6 +38,7 @@ parameters they accept:
 
 [Patreon](http://patreon.com/):
 
+  - patreon?\<username\>
   - patreon/activities?\<username\>
 
     Turns the activity feed found on Patreon pages into an RSS feed.
@@ -49,6 +52,7 @@ parameters they accept:
 
 [Twitter](http://twitter.com/):
 
+  - twitter?\<data_widget_id\>
   - twitter/timelineWidget?\<data_widget_id\>
 
     Turns the timeline widget data stream into an RSS feed. To retrieve the
