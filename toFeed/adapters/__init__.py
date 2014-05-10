@@ -38,8 +38,6 @@ def get_adapters():
     for _, name, _ in pkgutil.iter_modules(__path__):
         module = importlib.import_module('.' + name, ADAPTERS_PACKAGE_PATH)
         for _, adapter in inspect.getmembers(module, _is_adapter):
-            adapters[module.ROUTE + '/' + adapter.ROUTE] = adapter
-
             # If the adapter is the primary adapter of the module, make it
             # directly accessible only via the module route as well.
             # TODO: Possibly implement that the same cache is used in this case.
@@ -47,5 +45,11 @@ def get_adapters():
             # but I would like to think that that's not needed.
             if adapter.PRIMARY:
                 adapters[module.ROUTE] = adapter
+
+                # If the adapter is the primary adapter a route is optional
+                if not adapter.ROUTE:
+                    continue
+
+            adapters[module.ROUTE + '/' + adapter.ROUTE] = adapter
 
     return adapters
