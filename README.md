@@ -69,4 +69,4 @@ running on http://127.0.0.1:5000/ and expose the routes to your adapters
 from there.
 
 If you want to run toFeed on a web server, but don't own one, check out the
-awesome service [Heroku](http://heroku.com/), there you can get one for free.
+awesome service [Heroku](http://heroku.com/) where you can get one for free.
