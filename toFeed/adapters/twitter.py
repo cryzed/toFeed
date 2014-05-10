@@ -18,7 +18,7 @@ class TimelineWidget(Adapter):
 
     def __init__(self, data_widget_id, **kwargs):
         Adapter.__init__(self, **kwargs)
-        self.url = TimelineWidget.URL_TEMPLATE % data_widget_id
+        self.url = self.URL_TEMPLATE % data_widget_id
 
     def to_feed(self):
         response = urllib2.urlopen(self.url)
@@ -34,7 +34,7 @@ class TimelineWidget(Adapter):
 
         for tweet in soup('li', {'class': 'tweet'}):
             permalink = tweet.find('a', {'class': 'permalink'})['href']
-            pub_date = datetime.datetime.strptime(tweet.find('time')['datetime'], TimelineWidget.DATETIME_FORMAT)
+            pub_date = datetime.datetime.strptime(tweet.find('time')['datetime'], self.DATETIME_FORMAT)
             name, _, nickname = list(tweet.find('div', {'class': 'p-author'}).stripped_strings)
 
             element = tweet.find('div', {'class': 'e-entry-content'})

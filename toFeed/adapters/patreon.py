@@ -18,7 +18,7 @@ class ActivityFeed(Adapter):
 
     def __init__(self, username, max_title_length=100, **kwargs):
         Adapter.__init__(self, **kwargs)
-        self.url = ActivityFeed.URL_TEMPLATE % username
+        self.url = self.URL_TEMPLATE % username
         self.max_title_length = max_title_length
 
     def to_feed(self):
@@ -36,7 +36,7 @@ class ActivityFeed(Adapter):
 
             pub_date = datetime.datetime.strptime(
                 list(activity.find('p', {'class': 'dateBox'}).stripped_strings)[0],
-                ActivityFeed.DATETIME_FORMAT)
+                self.DATETIME_FORMAT)
 
             element = activity.find('div', {'class': 'shareContent'})
             title = ' '.join(list(element.stripped_strings))

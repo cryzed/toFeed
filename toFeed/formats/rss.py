@@ -83,7 +83,7 @@ class Channel(object):
             if isinstance(value, datetime.datetime):
                 kwargs[element] = _format_rfc_822(value)
 
-        for element in Channel.OPTIONAL_ELEMENTS:
+        for element in self.OPTIONAL_ELEMENTS:
             setattr(self, element, kwargs.get(element))
 
         self.items = set(items)
@@ -95,7 +95,7 @@ class Channel(object):
             self.items.add(Item(*args, **kwargs))
 
     def generate(self):
-        elements = Channel.ELEMENTS[:]
+        elements = self.ELEMENTS[:]
 
         data = {'items': self.items}
         if self.categories:
@@ -123,11 +123,11 @@ class Item(object):
         if pub_date:
             kwargs['pub_date'] = _format_rfc_822(pub_date)
 
-        for element in Item.OPTIONAL_ELEMENTS:
+        for element in self.OPTIONAL_ELEMENTS:
             setattr(self, element, kwargs.get(element))
 
     def generate(self):
-        elements = Item.ELEMENTS[:]
+        elements = self.ELEMENTS[:]
 
         data = {}
         if self.categories:
