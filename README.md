@@ -52,7 +52,11 @@ parameters they accept:
 
 [Twitter](http://twitter.com/):
 
-  - twitter?\<data_widget_id\>
+  - twitter?\<username\>
+
+    Turns the regular twitter feed into an RSS feed. Simply use the username
+    as an argument.
+
   - twitter/timelineWidget?\<data_widget_id\>
 
     Turns the timeline widget data stream into an RSS feed. To retrieve the
