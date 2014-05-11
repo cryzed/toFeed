@@ -1,11 +1,12 @@
 import datetime
 import urllib2
-import urlparse
 
 import bs4
 
 from toFeed.formats import rss
 from toFeed.adapters import Adapter
+import toFeed.utils
+from toFeed.utils import spoon
 
 ROUTE = 'patreon'
 
@@ -30,7 +31,7 @@ class ActivityFeed(Adapter):
         feed = rss.Channel(title, self.url, title, pub_date=now, last_build_date=now)
 
         for activity in soup('div', {'class': 'box'})[1:]:
-            # Ignore non-public member-only activity entries
+            # Ignore non-public member-only activity entries for now
             if activity['prv'] in ['1', '100']:
                 continue
 
@@ -38,41 +39,23 @@ class ActivityFeed(Adapter):
                 list(activity.find('p', {'class': 'dateBox'}).stripped_strings)[0],
                 self.DATETIME_FORMAT)
 
-            element = activity.find('div', {'class': 'shareContent'})
-            title = ' '.join(list(element.stripped_strings))
+            content = activity.find('div', {'class': 'shareContent'})
+            title = ' '.join(content.stripped_strings)
             if len(title) > self.max_title_length:
-                title = title[:self.max_title_length] + ' ...'
+                title = toFeed.utils.shorten_title(title, self.max_title_length)
 
-            # Convert newline characters found in the content to <br/> tags,
-            # allowing various RSS readers to display the post correctly.
-            contents = []
-            br_tag = soup.new_tag('br')
-            for content in element.contents:
-                if isinstance(content, basestring):
-                    for line in content.split('\n'):
-                        contents.append(soup.new_string(line))
-                        contents.append(br_tag)
-                else:
-                    contents.append(content)
-            element.contents = contents
-            description = unicode(element)
+            spoon.convert_newlines(soup, content)
+            description = unicode(content)
 
             link = None
+            spoon.absolutize_references(self.url, activity)
             if 'note' in activity['class']:
-                link = urlparse.urljoin(self.url, activity.find('a', {'class': 'noteLink'})['href'])
+                link = activity.find('a', {'class': 'noteLink'})['href']
 
             elif 'photo' in activity['class']:
-                element = activity.find('a', {'class': 'imagePopup'})
-
-                # Make URLs absolute
-                link = urlparse.urljoin(self.url, element['href'])
-                element['href'] = link
-
-                # Fix "src"-attribute of the contained img-tag
-                image = element.find('img')
-                image['src'] = 'http:' + image['src']
-
-                description = unicode(element) + '<br/>' + description
+                content = activity.find('a', {'class': 'imagePopup'})
+                link = content['href']
+                description = unicode(content) + '<br/>' + description
 
             author = list(activity.find('p', {'class': 'info'}).stripped_strings)[0]
             feed.add(title, link, description, author=author, guid=link, pub_date=pub_date)

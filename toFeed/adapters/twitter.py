@@ -1,12 +1,12 @@
 import datetime
 import json
 import urllib2
-import urlparse
 
 import bs4
 
 from toFeed.formats import rss
 from toFeed.adapters import Adapter
+from toFeed.utils import spoon
 
 ROUTE = 'twitter'
 
@@ -40,15 +40,14 @@ class Primitive(Adapter):
             pub_date = datetime.datetime.fromtimestamp(timestamp / 1000)
 
             tweet_text = tweet.find('p', {'class': 'tweet-text'})
-            # Make links absolute and normalize
+            spoon.absolutize_references(self.url, tweet_text)
+
             for a in tweet_text('a'):
-                target = ''.join(a.stripped_strings)
-                normalized = soup.new_tag('a', href=urlparse.urljoin(self.url, a['href']))
-                normalized.string = target
-                a.replace_with(normalized)
+                spoon.collapse_tag(soup, a)
 
             title = ' '.join(tweet_text.stripped_strings)
             description = unicode(tweet_text)
+
             media = tweet.find('a', {'class': 'media'})
             if media:
                 thumbnail = tweet.find('div', {'class': 'js-media-img-placeholder'})['data-img-src']
@@ -89,12 +88,10 @@ class TimelineWidget(Adapter):
 
             element = tweet.find('div', {'class': 'e-entry-content'})
 
-            # Normalize links to build the title properly
+            # Normalize links to build the title properly, but don't collapse
+            # the possibly contained image.
             for a in element('a', {'class': lambda klass: klass in ['profile', 'hashtag']}):
-                name = ''.join(list(a.stripped_strings))
-                tag = soup.new_tag('a', href=a['href'])
-                tag.string = name
-                a.replace_with(tag)
+                spoon.collapse_tag(soup, a)
 
             title = ' '.join(element.p.stripped_strings)
             description = unicode(element)
