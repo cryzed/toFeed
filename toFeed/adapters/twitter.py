@@ -88,9 +88,18 @@ class TimelineWidget(Adapter):
             name, _, nickname = list(tweet.find('div', {'class': 'p-author'}).stripped_strings)
 
             element = tweet.find('div', {'class': 'e-entry-content'})
+
+            # Normalize links to build the title properly
+            for a in element('a', {'class': lambda klass: klass in ['profile', 'hashtag']}):
+                name = ''.join(list(a.stripped_strings))
+                tag = soup.new_tag('a', href=a['href'])
+                tag.string = name
+                a.replace_with(tag)
+
             title = ' '.join(element.p.stripped_strings)
             description = unicode(element)
 
             feed.add(title, permalink, description, author='%s @%s' % (name, nickname), guid=permalink, pub_date=pub_date)
 
+        #return data['body']
         return feed.generate()
