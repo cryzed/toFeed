@@ -2,7 +2,7 @@
 Helper classes for BeautifulSoup objects.
 """
 
-
+import bs4
 import urlparse
 
 
@@ -36,34 +36,43 @@ def absolutize_references(base_url, soup, attributes=['href', 'img']):
 
 def _copy_tag(soup, tag):
     """
-    Creates a "copy" of the given tag. If one tries to insert the same tag
-    reference all over the soup horrible things happen.
+    Creates a copy of the given tag. This is needed to avoid confusing the
+    BeautifulSoup structure and running into strange errors.
     """
-    new_tag = soup.new_tag(tag.name, **tag.attrs)
-    new_tag.contents = tag.contents
-    return new_tag
+    copy = soup.new_tag(tag.name, **tag.attrs)
+    for content in tag.contents:
+        copy.append(content)
+    return copy
 
 
-# I'm aware there are many methods to do this, but I'm not sure if they are any
-# faster.
 def replace_string_with_tag(soup, tag, string, replacement):
     """
-    Searches for the given string within the soup and if found replaces it with
-    the tag-element.
+    Replaces all occurrences of the string in the given tag's strings with the
+    replacement.
     """
+    not_processed = [tag]
+    while not_processed:
+        tag = not_processed.pop()
+        contents = []
 
-    offset = 0
-    for index, content in enumerate(tag.contents[:]):
-        if isinstance(content, basestring):
-            for part in content.split(string):
-                tag.insert(index + offset, _copy_tag(soup, replacement))
-                tag.insert(index + offset, soup.new_string(part))
-                tag.extract()
-                offset += 2
+        for content in tag.contents:
+            if isinstance(content, bs4.NavigableString):
+                parts = content.split(string)
+                length = len(parts)
+                for index, part in enumerate(parts):
+                    contents.append(soup.new_string(part))
 
-    # Extract original contents
-    for content in tag.contents[index + offset:]:
-        content.extract()
+                    # Don't append the replacement after the last part
+                    if index == length - 1:
+                        break
+                    contents.append(_copy_tag(soup, replacement))
+            else:
+                contents.append(content)
+                not_processed.append(content)
+
+        tag.clear()
+        for content in contents:
+            tag.append(content)
 
 
 def convert_newlines(soup, tag):
