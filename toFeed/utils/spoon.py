@@ -28,7 +28,7 @@ def absolutize_references(base_url, soup, attributes=['href', 'img']):
     Searches every element of the given soup and if a matching attribute is
     found, makes the reference absolute.
     """
-    for element in soup():
+    for element in [soup] + soup():
         for attribute in attributes:
             if element.has_attr(attribute):
                 element[attribute] = urlparse.urljoin(base_url, element[attribute])
