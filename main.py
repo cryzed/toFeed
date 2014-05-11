@@ -20,10 +20,10 @@ def index(path):
     args = []
     kwargs = {}
     for key, value in flask.request.args.items():
-        if not value:
+        if value:
+            kwargs[key] = value
+        else:
             args.append(key)
-            continue
-        kwargs[key] = value
 
     instance = adapters[path](*args, **kwargs)
     if flask.request.full_path in cached:

@@ -39,26 +39,47 @@ class ActivityFeed(Adapter):
                 list(activity.find('p', {'class': 'dateBox'}).stripped_strings)[0],
                 self.DATETIME_FORMAT)
 
-            content = activity.find('div', {'class': 'shareContent'})
-            title = ' '.join(content.stripped_strings)
-            if len(title) > self.max_title_length:
-                title = toFeed.utils.shorten_title(title, self.max_title_length)
-
-            spoon.convert_newlines(soup, content)
-            description = unicode(content)
-
             link = None
-            spoon.absolutize_references(self.url, activity)
+            content = None
+            description = None
             if 'note' in activity['class']:
-                link = activity.find('a', {'class': 'noteLink'})['href']
+                element = activity.find('a', {'class': 'noteLink'})
+                spoon.absolutize_references(self.url, element)
+                link = element['href']
+                content = activity.find('div', {'class': 'shareContent'})
+                spoon.absolutize_references(self.url, content)
+                spoon.convert_newlines(soup, content)
+                description = unicode(content)
+
             elif 'photo' in activity['class']:
-                content = activity.find('a', {'class': 'imagePopup'})
-                link = content['href']
-                description = unicode(content) + '<br/>' + description
+                content = activity.find('div', {'class': 'shareContent'})
+                photo = activity.find('a', {'class': 'imagePopup'})
+                spoon.absolutize_references(self.url, content)
+                spoon.absolutize_references(self.url, photo)
+                spoon.convert_newlines(soup, content)
+                link = photo['href']
+                description = unicode(photo) + '<br/>' + unicode(content)
+
+            elif 'mylink' in activity['class']:
+                link_description = activity.find('p', {'class': 'linkDesc'})
+                photo = activity.find('a', {'class': 'imagePopup'})
+                content = activity.find('div', {'class': 'shareContent'})
+                spoon.absolutize_references(self.url, link_description)
+                spoon.absolutize_references(self.url, photo)
+                link = photo['href']
+                description = unicode(photo) + '<br/>' + unicode(link_description) + '<br/>' + unicode(content)
 
             # This should throw an error as soon as the possible activity feed
             # content changes significantly.
-            assert link
+            assert link and content and description
+
+            if 'mylink' in activity['class']:
+                title = ''.join(activity.find('p', {'class': 'title'}).stripped_strings)
+            else:
+                title = ' '.join(content.stripped_strings)
+
+            if len(title) > self.max_title_length:
+                title = toFeed.utils.shorten_title(title, self.max_title_length)
 
             author = list(activity.find('p', {'class': 'info'}).stripped_strings)[0]
             feed.add(title, link, description, author=author, guid=link, pub_date=pub_date)
