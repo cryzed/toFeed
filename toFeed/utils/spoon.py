@@ -34,20 +34,36 @@ def absolutize_references(base_url, soup, attributes=['href', 'img']):
                 element[attribute] = urlparse.urljoin(base_url, element[attribute])
 
 
+def _copy_tag(soup, tag):
+    """
+    Creates a "copy" of the given tag. If one tries to insert the same tag
+    reference all over the soup horrible things happen.
+    """
+    new_tag = soup.new_tag(tag.name, **tag.attrs)
+    new_tag.contents = tag.contents
+    return new_tag
+
+
+# I'm aware there are many methods to do this, but I'm not sure if they are any
+# faster.
 def replace_string_with_tag(soup, tag, string, replacement):
     """
     Searches for the given string within the soup and if found replaces it with
     the tag-element.
     """
-    contents = []
-    for element in tag.contents:
-        if isinstance(element, basestring):
-            for part in element.split(string):
-                contents.append(soup.new_string(part))
-                contents.append(replacement)
-        else:
-            contents.append(element)
-    tag.contents = contents
+
+    offset = 0
+    for index, content in enumerate(tag.contents[:]):
+        if isinstance(content, basestring):
+            for part in content.split(string):
+                tag.insert(index + offset, _copy_tag(soup, replacement))
+                tag.insert(index + offset, soup.new_string(part))
+                tag.extract()
+                offset += 2
+
+    # Extract original contents
+    for content in tag.contents[index + offset:]:
+        content.extract()
 
 
 def convert_newlines(soup, tag):
