@@ -3,9 +3,9 @@ import urllib2
 
 import bs4
 
+import toFeed.utils
 from toFeed.formats import rss
 from toFeed.adapters import Adapter
-import toFeed.utils
 from toFeed.utils import spoon
 
 ROUTE = 'patreon'
