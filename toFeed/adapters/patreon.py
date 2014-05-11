@@ -66,6 +66,7 @@ class ActivityFeed(Adapter):
                 content = activity.find('div', {'class': 'shareContent'})
                 spoon.absolutize_references(self.url, link_description)
                 spoon.absolutize_references(self.url, photo)
+                spoon.convert_newlines(soup, content)
                 link = photo['href']
                 description = unicode(photo) + '<br/>' + unicode(link_description) + '<br/>' + unicode(content)
 
