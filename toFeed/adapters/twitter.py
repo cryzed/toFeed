@@ -101,5 +101,4 @@ class TimelineWidget(Adapter):
 
             feed.add(title, permalink, description, author='%s @%s' % (name, nickname), guid=permalink, pub_date=pub_date)
 
-        #return data['body']
         return feed.generate()

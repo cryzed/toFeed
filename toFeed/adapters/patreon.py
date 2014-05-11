@@ -19,7 +19,7 @@ class ActivityFeed(Adapter):
     def __init__(self, username, max_title_length=100, **kwargs):
         Adapter.__init__(self, **kwargs)
         self.url = self.URL_TEMPLATE % username
-        self.max_title_length = max_title_length
+        self.max_title_length = int(max_title_length)
 
     def to_feed(self):
         response = urllib2.urlopen(self.url)
