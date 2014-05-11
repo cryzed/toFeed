@@ -68,6 +68,13 @@ parameters they accept:
     is a way better option.
 
 
+[Picroma](https://picroma.com/)
+
+  - picroma
+
+  Simply turns wollay's blog into an RSS feed.
+
+
 Usage
 -----
 toFeed is designed to be run either locally on your own PC or on your own
