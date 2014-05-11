@@ -71,6 +71,7 @@ parameters they accept:
 [Picroma](https://picroma.com/)
 
   - picroma
+  - picroma/blog
 
   Simply turns wollay's blog into an RSS feed.
 
