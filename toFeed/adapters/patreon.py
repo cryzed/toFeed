@@ -51,11 +51,14 @@ class ActivityFeed(Adapter):
             spoon.absolutize_references(self.url, activity)
             if 'note' in activity['class']:
                 link = activity.find('a', {'class': 'noteLink'})['href']
-
             elif 'photo' in activity['class']:
                 content = activity.find('a', {'class': 'imagePopup'})
                 link = content['href']
                 description = unicode(content) + '<br/>' + description
+
+            # This should throw an error as soon as the possible activity feed
+            # content changes significantly.
+            assert link
 
             author = list(activity.find('p', {'class': 'info'}).stripped_strings)[0]
             feed.add(title, link, description, author=author, guid=link, pub_date=pub_date)
