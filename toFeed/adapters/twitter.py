@@ -27,7 +27,9 @@ class Primitive(Adapter):
         title = soup.title.string
         link = self.url
         description = soup.find('p', {'class': 'bio'}).string
-        feed = rss.Channel(title, link, description)
+
+        now = datetime.datetime.now()
+        feed = rss.Channel(title, link, description, pub_date=now, last_build_date=now)
 
         for tweet in soup('li', {'data-item-type': 'tweet'}):
             account_group = list(tweet.find('a', {'class': 'account-group'}).stripped_strings)
