@@ -11,8 +11,8 @@ from toFeed.adapters import Adapter
 ROUTE = 'twitter'
 
 
-class Twitter(Adapter):
-    PRIMARY = True
+class Primitive(Adapter):
+    ROUTE = 'primitive'
     URL_TEMPLATE = 'https://twitter.com/%s'
     STATUSES_URL_TEMPLATE = 'https://twitter.com/%s/statuses/%s'
 
@@ -59,6 +59,7 @@ class Twitter(Adapter):
 
 
 class TimelineWidget(Adapter):
+    PRIMARY = True
     ROUTE = 'timelineWidget'
     URL_TEMPLATE = 'http://cdn.syndication.twimg.com/widgets/timelines/%s'
     DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S+0000'
