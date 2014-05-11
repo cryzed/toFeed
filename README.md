@@ -64,9 +64,8 @@ parameters they accept:
 
     Turns the regular twitter feed into an RSS feed. Simply use the username
     as an argument. Apparently there are different kind of Twitter pages, so
-    don't expect this to work for all users. Time timeline widget is a way better
-    option.
-
+    don't expect this to work for all users. Using the timeline widget adapter
+    is a way better option.
 
 
 Usage
