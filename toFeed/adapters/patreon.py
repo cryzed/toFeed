@@ -1,88 +1,133 @@
-import datetime
+ROUTE = 'patreon'
+
+from datetime import datetime
 import urllib2
 
 import bs4
 
+import toFeed.adapters
+import toFeed.utils.spoon as spoon
+import toFeed.formats.rss
 import toFeed.utils
-from toFeed.formats import rss
-from toFeed.adapters import Adapter
-from toFeed.utils import spoon
-
-ROUTE = 'patreon'
 
 
-class ActivityFeed(Adapter):
+class ActivityFeed(toFeed.adapters.Adapter):
     ROUTE = 'activities'
     PRIMARY = True
     URL_TEMPLATE = 'http://www.patreon.com/%s&ty=a'
-    DATETIME_FORMAT = '%B %d, %Y %H:%M:%S'
+    DATE_FORMAT = '%B %d, %Y %H:%M:%S'
 
     def __init__(self, username, max_title_length=100, **kwargs):
-        Adapter.__init__(self, **kwargs)
+        toFeed.adapters.Adapter.__init__(self, **kwargs)
         self.url = self.URL_TEMPLATE % username
         self.max_title_length = int(max_title_length)
+
+    @staticmethod
+    def _parse_content(soup, element):
+        share_content = element.find('div', {'class': 'shareContent'})
+        spoon.convert_newlines(soup, share_content)
+        return share_content
+
+    @staticmethod
+    def _parse_author(element):
+        author = ''.join(element.find('p', {'class': 'info'}).stripped_strings)
+        return author
+
+    def _parse_date(self, element):
+        date_string = element.find('div', {'class': 'dateBox'}).string.strip()
+        date = datetime.strptime(date_string, self.DATE_FORMAT)
+        return date
+
+    def _parse_image(self, element):
+        image_popup = element.find('a', {'class': 'imagePopup'})
+        spoon.absolutize_references(self.url, image_popup, recursive=False)
+        return image_popup
+
+    def _parse_link(self, element):
+        anchor = element.find('a', rel='shares')
+        spoon.absolutize_references(self.url, anchor, recursive=False)
+        return anchor['href']
+
+    def _parse_note(self, soup, note_soup):
+        author = self._parse_author(note_soup)
+        content = self._parse_content(soup, note_soup)
+        date = self._parse_date(note_soup)
+        link = self._parse_link(note_soup)
+        return link, content, author, date
+
+    def _parse_photo(self, soup, photo_soup):
+        author = self._parse_author(photo_soup)
+        content = self._parse_content(soup, photo_soup)
+        image = self._parse_image(photo_soup)
+        date = self._parse_date(photo_soup)
+        link = self._parse_link(photo_soup)
+        return link, content, image, author, date
+
+    def _parse_mylink(self, soup, mylink_soup):
+        author = self._parse_author(mylink_soup)
+
+        title_anchor = mylink_soup.find('p', {'class': 'title'}).a
+        title = title_anchor.string.strip()
+
+        spoon.absolutize_references(self.url, title_anchor, recursive=False)
+        link = title_anchor['href']
+
+        image = self._parse_image(mylink_soup)
+
+        # Apparently newlines in this section are not even included, so there's
+        # no need to convert newlines
+        link_description = mylink_soup.find('p', {'class': 'linkDesc'})
+        content = self._parse_content(soup, mylink_soup)
+        date = self._parse_date(mylink_soup)
+        return title, link, image, link_description, content, author, date
 
     def to_feed(self):
         response = urllib2.urlopen(self.url)
         soup = bs4.BeautifulSoup(response)
 
         title = soup.title.string
-        now = datetime.datetime.now()
-        feed = rss.Channel(title, self.url, title, pub_date=now, last_build_date=now)
+        feed = toFeed.formats.rss.Channel(title, self.url, title)
 
-        for activity in soup('div', {'class': 'box'})[1:]:
-            # Ignore non-public member-only activity entries for now
-            if activity['prv'] in ['1', '100']:
+        for activity in soup.find('div', id='boxGrid')('div', recursive=False):
+            prv = activity.get('prv')
+            if prv is None or prv in ['1', '100']:
                 continue
 
-            pub_date = datetime.datetime.strptime(
-                list(activity.find('p', {'class': 'dateBox'}).stripped_strings)[0],
-                self.DATETIME_FORMAT)
-
-            link = None
-            content = None
-            description = None
             if 'note' in activity['class']:
-                element = activity.find('a', {'class': 'noteLink'})
-                spoon.absolutize_references(self.url, element)
-                link = element['href']
-                content = activity.find('div', {'class': 'shareContent'})
-                spoon.absolutize_references(self.url, content)
-                spoon.convert_newlines(soup, content)
-                description = unicode(content)
+                link, content, author, date = self._parse_note(soup, activity)
+
+                # TODO: Possibly stop modifying the soup in the parsing methods
+                # and do it here, this way I wouldn't need to grab the content
+                # string this way again.
+                content_string = ' '.join(content.stripped_strings)
+
+                if self.max_title_length >= len(content_string):
+                    title = content_string
+                else:
+                    title = toFeed.utils.shorten_to_title(content_string, self.max_title_length)
+
+                feed.add(title, link, unicode(content), author=author, pub_date=date)
 
             elif 'photo' in activity['class']:
-                content = activity.find('div', {'class': 'shareContent'})
-                photo = activity.find('a', {'class': 'imagePopup'})
-                spoon.absolutize_references(self.url, content)
-                spoon.absolutize_references(self.url, photo)
-                spoon.convert_newlines(soup, content)
-                link = photo['href']
-                description = unicode(photo) + '<br/>' + unicode(content)
+                link, content, image, author, date = self._parse_photo(soup, activity)
+
+                # TODO: Possibly stop modifying the soup in the parsing methods
+                # and do it here, this way I wouldn't need to grab the content
+                # string this way again.
+                content_string = ' '.join(content.stripped_strings)
+
+                if self.max_title_length >= len(content_string):
+                    title = content_string
+                else:
+                    title = toFeed.utils.shorten_to_title(content_string, self.max_title_length)
+
+                content.insert(0, image)
+                feed.add(title, link, unicode(content), author=author, pub_date=date)
 
             elif 'mylink' in activity['class']:
-                link_description = activity.find('p', {'class': 'linkDesc'})
-                photo = activity.find('a', {'class': 'imagePopup'})
-                content = activity.find('div', {'class': 'shareContent'})
-                spoon.absolutize_references(self.url, link_description)
-                spoon.absolutize_references(self.url, photo)
-                spoon.convert_newlines(soup, content)
-                link = photo['href']
-                description = unicode(photo) + '<br/>' + unicode(link_description) + '<br/>' + unicode(content)
-
-            # This should throw an error as soon as the possible activity feed
-            # content changes significantly.
-            assert link and content and description
-
-            if 'mylink' in activity['class']:
-                title = ''.join(activity.find('p', {'class': 'title'}).stripped_strings)
-            else:
-                title = ' '.join(content.stripped_strings)
-
-            if len(title) > self.max_title_length:
-                title = toFeed.utils.shorten_title(title, self.max_title_length)
-
-            author = list(activity.find('p', {'class': 'info'}).stripped_strings)[0]
-            feed.add(title, link, description, author=author, guid=link, pub_date=pub_date)
+                title, link, image, link_description, content, author, date = self._parse_mylink(soup, activity)
+                content.insert(0, link_description)
+                content.insert(0, image)
+                feed.add(title, link, unicode(content), author=author, pub_date=date)
 
         return feed.generate()
