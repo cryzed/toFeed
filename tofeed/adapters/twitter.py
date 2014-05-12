@@ -6,18 +6,18 @@ import urllib2
 
 import bs4
 
-import tofeed_.adapters
-import tofeed_.formats.rss
-import tofeed_.utils.spoon as spoon
+import tofeed.adapters
+import tofeed.formats.rss
+import tofeed.utils.spoon as spoon
 
 
-class Primitive(tofeed_.adapters.Adapter):
+class Primitive(tofeed.adapters.Adapter):
     ROUTE = 'primitive'
     URL_TEMPLATE = 'https://twitter.com/%s'
     STATUSES_URL_TEMPLATE = 'https://twitter.com/%s/statuses/%s'
 
     def __init__(self, username, **kwargs):
-        tofeed_.adapters.Adapter.__init__(self, **kwargs)
+        tofeed.adapters.Adapter.__init__(self, **kwargs)
         self.url = self.URL_TEMPLATE % username
 
     def to_feed(self):
@@ -29,7 +29,7 @@ class Primitive(tofeed_.adapters.Adapter):
         description = soup.find('p', {'class': 'bio'}).string
 
         now = datetime.datetime.now()
-        feed = tofeed_.formats.rss.Channel(title, link, description, pub_date=now, last_build_date=now)
+        feed = tofeed.formats.rss.Channel(title, link, description, pub_date=now, last_build_date=now)
 
         for tweet in soup('li', {'data-item-type': 'tweet'}):
             account_group = list(tweet.find('a', {'class': 'account-group'}).stripped_strings)
@@ -59,14 +59,14 @@ class Primitive(tofeed_.adapters.Adapter):
         return feed.generate()
 
 
-class TimelineWidget(tofeed_.adapters.Adapter):
+class TimelineWidget(tofeed.adapters.Adapter):
     PRIMARY = True
     ROUTE = 'timelineWidget'
     URL_TEMPLATE = 'http://cdn.syndication.twimg.com/widgets/timelines/%s'
     DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S+0000'
 
     def __init__(self, data_widget_id, **kwargs):
-        tofeed_.adapters.Adapter.__init__(self, **kwargs)
+        tofeed.adapters.Adapter.__init__(self, **kwargs)
         self.url = self.URL_TEMPLATE % data_widget_id
 
     def to_feed(self):
@@ -79,7 +79,7 @@ class TimelineWidget(tofeed_.adapters.Adapter):
         link = element['href']
 
         now = datetime.datetime.now()
-        feed = tofeed_.formats.rss.Channel(title, link, title, pub_date=now, last_build_date=now)
+        feed = tofeed.formats.rss.Channel(title, link, title, pub_date=now, last_build_date=now)
 
         for tweet in soup('li', {'class': 'tweet'}):
             permalink = tweet.find('a', {'class': 'permalink'})['href']

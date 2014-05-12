@@ -5,20 +5,20 @@ import urllib2
 
 import bs4
 
-import tofeed_.adapters
-import tofeed_.utils.spoon as spoon
-import tofeed_.formats.rss
-import tofeed_.utils
+import tofeed.adapters
+import tofeed.utils.spoon as spoon
+import tofeed.formats.rss
+import tofeed.utils
 
 
-class ActivityFeed(tofeed_.adapters.Adapter):
+class ActivityFeed(tofeed.adapters.Adapter):
     ROUTE = 'activities'
     PRIMARY = True
     URL_TEMPLATE = 'http://www.patreon.com/%s&ty=a'
     DATE_FORMAT = '%B %d, %Y %H:%M:%S'
 
     def __init__(self, username, max_title_length=100, **kwargs):
-        tofeed_.adapters.Adapter.__init__(self, **kwargs)
+        tofeed.adapters.Adapter.__init__(self, **kwargs)
         self.url = self.URL_TEMPLATE % username
         self.max_title_length = int(max_title_length)
 
@@ -87,7 +87,7 @@ class ActivityFeed(tofeed_.adapters.Adapter):
 
         title = soup.title.string
         now = datetime.now()
-        feed = tofeed_.formats.rss.Channel(title, self.url, title, pub_date=now, last_build_date=now)
+        feed = tofeed.formats.rss.Channel(title, self.url, title, pub_date=now, last_build_date=now)
 
         for activity in soup.find('div', id='boxGrid')('div', recursive=False):
             prv = activity.get('prv')
@@ -105,7 +105,7 @@ class ActivityFeed(tofeed_.adapters.Adapter):
                 if self.max_title_length >= len(content_string):
                     title = content_string
                 else:
-                    title = tofeed_.utils.shorten_to_title(content_string, self.max_title_length)
+                    title = tofeed.utils.shorten_to_title(content_string, self.max_title_length)
 
                 feed.add(title, link, unicode(content), author=author, pub_date=date)
 
@@ -120,7 +120,7 @@ class ActivityFeed(tofeed_.adapters.Adapter):
                 if self.max_title_length >= len(content_string):
                     title = content_string
                 else:
-                    title = tofeed_.utils.shorten_to_title(content_string, self.max_title_length)
+                    title = tofeed.utils.shorten_to_title(content_string, self.max_title_length)
 
                 content.insert(0, image)
                 feed.add(title, link, unicode(content), author=author, pub_date=date)

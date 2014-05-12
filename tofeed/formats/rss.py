@@ -4,7 +4,7 @@ import xml.sax.saxutils
 import jinja2
 
 
-JINJA2_EXTENSIONS = ['tofeed_.libraries.jinja2htmlcompress.HTMLCompress']
+JINJA2_EXTENSIONS = ['tofeed.libraries.jinja2htmlcompress.HTMLCompress']
 CHANNEL_TEMPLATE = '''<rss version="2.0">
     <channel>
         <title>{{ title }}</title>

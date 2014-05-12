@@ -3,11 +3,11 @@ import time
 import flask
 import werkzeug.contrib.cache
 
-import tofeed_.adapters
+import tofeed.adapters
 
 
 app = flask.Flask(__name__)
-adapters = tofeed_.adapters.get_adapters()
+adapters = tofeed.adapters.get_adapters()
 cache = werkzeug.contrib.cache.SimpleCache()
 cached = {}
 
