@@ -1,23 +1,23 @@
+ROUTE = 'picroma'
+
 import datetime
 import urllib2
 
 import bs4
 
-from toFeed.adapters import Adapter
-from toFeed.formats import rss
-from toFeed.utils import spoon
-
-ROUTE = 'picroma'
+import toFeed.adapters
+import toFeed.formats.rss
+import toFeed.utils.spoon as spoon
 
 
-class Blog(Adapter):
+class Blog(toFeed.adapters.Adapter):
     PRIMARY = True
     ROUTE = 'blog'
     URL = 'https://picroma.com/'
     DATETIME_FORMAT = '%m/%d/%Y %H:%M:%S %p'
 
     def __init__(self, **kwargs):
-        Adapter.__init__(self, **kwargs)
+        toFeed.adapters.Adapter.__init__(self, **kwargs)
 
     def to_feed(self):
         response = urllib2.urlopen(self.URL)
@@ -25,7 +25,7 @@ class Blog(Adapter):
 
         now = datetime.datetime.now()
         title = soup.title.string
-        feed = rss.Channel(title, self.URL, title, pub_date=now, last_build_date=now)
+        feed = toFeed.formats.rss.Channel(title, self.URL, title, pub_date=now, last_build_date=now)
 
         for post in soup('div', {'class': 'blogPost'}):
             author, pub_date = list(post.find('div', {'class': 'username'}).stripped_strings)[0].split(',')
