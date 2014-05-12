@@ -1,5 +1,5 @@
 <div align="center">
-<img src="http://i.imgur.com/0kbZEwI.png"/>
+<img src="http://i.imgur.com/UBKObTR.png"/>
 <p>toFeed aims to provide syndication feeds for websites that don't.</p>
 </div>
 
