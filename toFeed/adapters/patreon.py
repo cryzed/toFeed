@@ -86,7 +86,8 @@ class ActivityFeed(toFeed.adapters.Adapter):
         soup = bs4.BeautifulSoup(response)
 
         title = soup.title.string
-        feed = toFeed.formats.rss.Channel(title, self.url, title)
+        now = datetime.now()
+        feed = toFeed.formats.rss.Channel(title, self.url, title, pub_date=now, last_build_date=now)
 
         for activity in soup.find('div', id='boxGrid')('div', recursive=False):
             prv = activity.get('prv')
