@@ -1,3 +1,5 @@
+ROUTE = 'twitter'
+
 import datetime
 import json
 import urllib2
@@ -7,8 +9,6 @@ import bs4
 import toFeed.adapters
 import toFeed.formats.rss
 import toFeed.utils.spoon as spoon
-
-ROUTE = 'twitter'
 
 
 class Primitive(toFeed.adapters.Adapter):
