@@ -43,7 +43,6 @@ def get_adapters():
         for _, adapter in inspect.getmembers(module, _is_adapter):
             # If the adapter is the primary adapter of the module, make it
             # directly accessible only via the module route as well.
-            # TODO: Possibly implement that the same cache is used in this case.
             # TODO: Possibly check for 2 primary adapters and throw an error
             if adapter.PRIMARY:
                 adapters[module.ROUTE] = adapter
