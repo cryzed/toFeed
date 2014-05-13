@@ -25,7 +25,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
     @staticmethod
     def _parse_content(soup, element):
         share_content = element.find('div', {'class': 'shareContent'})
-        spoon.convert_newlines(soup, share_content)
+        spoon.convert_newlines(share_content)
         return share_content
 
     @staticmethod

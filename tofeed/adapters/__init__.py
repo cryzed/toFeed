@@ -2,7 +2,7 @@ import pkgutil
 import inspect
 import importlib
 
-ADAPTERS_PACKAGE_PATH = 'tofeed.adapters.rst'
+ADAPTERS_PACKAGE_PATH = 'tofeed.adapters'
 
 
 # All adapters.rst need to inherit this base class.

@@ -46,8 +46,7 @@ parameters they accept:
     not having paid for any projects so far, and thus not being able to write
     a proper login mechanism.
 
-    - max_title_length: Defines the maximum length of the title, after which
-      it is cropped with "...".
+    - max_title_length: Defines the maximum length of the title.
 
 
 [Twitter](http://twitter.com/):
@@ -59,13 +58,6 @@ parameters they accept:
     data widget id you need to access your Twitter settings, create a new
     widget and then grab the "data-widget-id" attribute from the JavaScript
     snippet you are provided.
-
-  - twitter/primitive?\<username\>
-
-    Turns the regular twitter feed into an RSS feed. Simply use the username
-    as an argument. Apparently there are different kind of Twitter pages, so
-    don't expect this to work for all users. Using the timeline widget adapter
-    is a way better option.
 
 
 [Picroma](https://picroma.com/)
