@@ -8,7 +8,7 @@ import bs4
 
 import tofeed.adapters
 import tofeed.formats.rss
-import tofeed.utils.spoon as spoon
+import tofeed.utilities.spoon as spoon
 
 
 class Primitive(tofeed.adapters.Adapter):

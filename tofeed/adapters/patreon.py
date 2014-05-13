@@ -6,9 +6,9 @@ import urllib2
 import bs4
 
 import tofeed.adapters
-import tofeed.utils.spoon as spoon
+import tofeed.utilities.spoon as spoon
 import tofeed.formats.rss
-import tofeed.utils
+import tofeed.utilities
 
 
 class ActivityFeed(tofeed.adapters.Adapter):
@@ -105,7 +105,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
                 if self.max_title_length >= len(content_string):
                     title = content_string
                 else:
-                    title = tofeed.utils.shorten_to_title(content_string, self.max_title_length)
+                    title = tofeed.utilities.shorten_to_title(content_string, self.max_title_length)
 
                 feed.add(title, link, unicode(content), author=author, pub_date=date)
 
@@ -120,7 +120,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
                 if self.max_title_length >= len(content_string):
                     title = content_string
                 else:
-                    title = tofeed.utils.shorten_to_title(content_string, self.max_title_length)
+                    title = tofeed.utilities.shorten_to_title(content_string, self.max_title_length)
 
                 content.insert(0, image)
                 feed.add(title, link, unicode(content), author=author, pub_date=date)

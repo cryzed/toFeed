@@ -2,10 +2,10 @@ import pkgutil
 import inspect
 import importlib
 
-ADAPTERS_PACKAGE_PATH = 'tofeed.adapters'
+ADAPTERS_PACKAGE_PATH = 'tofeed.adapters.rst'
 
 
-# All adapters need to inherit this base class.
+# All adapters.rst need to inherit this base class.
 class Adapter(object):
     ROUTE = None
     PRIMARY = False
@@ -41,7 +41,7 @@ def get_adapters():
             # If the adapter is the primary adapter of the module, make it
             # directly accessible only via the module route as well.
             # TODO: Possibly implement that the same cache is used in this case.
-            # TODO: Possibly check for 2 primary adapters and throw an error
+            # TODO: Possibly check for 2 primary adapters.rst and throw an error
             # but I would like to think that that's not needed.
             if adapter.PRIMARY:
                 adapters[module.ROUTE] = adapter
