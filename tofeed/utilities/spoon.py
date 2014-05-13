@@ -5,7 +5,16 @@ Helper classes for BeautifulSoup objects.
 import bs4
 import urlparse
 
-import tofeed.utilities
+
+_soup = bs4.BeautifulSoup()
+
+#: Shortcut for BeautifulSoup().new_tag. This allows using the bound methods
+#: of the BeautifulSoup class without having to instantiate it manually.
+new_tag = _soup.new_tag
+
+#: Shortcut for BeautifulSoup().new_string. This allows using the bound methods
+#: of the BeautifulSoup class without having to instantiate it manually.
+new_string = _soup.new_string
 
 
 def collapse_tag(tag, joiner=''):
@@ -14,7 +23,7 @@ def collapse_tag(tag, joiner=''):
     joiner.
     """
     string = ''.join(tag.strings)
-    collapsed = tofeed.utilities.new_tag(tag.name)
+    collapsed = new_tag(tag.name)
     collapsed.attrs = tag.attrs
     collapsed.string = string
     tag.replace_with(collapsed)
@@ -37,7 +46,7 @@ def _copy_tag(tag):
     Creates a copy of the tag. Needed when trying to insert the same tag
     multiple times in different locations.
     """
-    copy = tofeed.utilities.new_tag(tag.name, **tag.attrs)
+    copy = new_tag(tag.name, **tag.attrs)
     map(copy.append, tag.contents)
     return copy
 
@@ -57,7 +66,7 @@ def replace_string_with_tag(tag, string, replacement, recursive=True):
                 parts = content.split(string)
                 length = len(parts)
                 for index, part in enumerate(parts):
-                    contents.append(tofeed.utilities.new_string(part))
+                    contents.append(new_string(part))
 
                     # Don't append the replacement after the last part
                     if index == length - 1:
@@ -78,5 +87,5 @@ def convert_newlines(tag, recursive=True):
     """
     Replaces newline characters found in the tag's strings break line tags.
     """
-    br_tag = tofeed.utilities.new_tag('br')
+    br_tag = new_tag('br')
     replace_string_with_tag(tag, '\n', br_tag, recursive)
