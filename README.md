@@ -45,6 +45,7 @@ follow their [Getting Started with Python on Heroku] guide from the [Declare
 process types with Procfile] section onwards.
 
 
+[virtualenv] https://pypi.python.org/pypi/virtualenv
 [Heroku]: http://heroku.com/
 [Getting Started with Python on Heroku]: https://devcenter.heroku.com/articles/getting-started-with-python
 [Declare process types with Procfile]: https://devcenter.heroku.com/articles/getting-started-with-python#declare-process-types-with-procfile
