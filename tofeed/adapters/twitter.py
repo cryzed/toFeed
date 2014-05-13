@@ -36,7 +36,11 @@ class TimelineWidget(tofeed.adapters.Adapter):
         for tweet in soup('li', {'class': 'tweet'}):
             permalink = tweet.find('a', {'class': 'permalink'})['href']
             pub_date = datetime.datetime.strptime(tweet.find('time')['datetime'], self.DATETIME_FORMAT)
-            name, _, screen_name = list(tweet.find('a', {'class': 'profile'}).stripped_strings)
+
+            profile_strings = list(tweet.find('a', {'class': 'profile'}).stripped_strings)
+            full_name = profile_strings[0]
+            screen_name = ''.join(profile_strings[1:])
+
             content = tweet.find('div', {'class': 'e-entry-content'})
 
             # Strip out markup
@@ -44,5 +48,5 @@ class TimelineWidget(tofeed.adapters.Adapter):
             title = ' '.join(content.p.stripped_strings)
             description = unicode(content)
 
-            feed.add(title, permalink, description, author='%s @%s' % (name, screen_name), guid=permalink, pub_date=pub_date)
+            feed.add(title, permalink, description, author='%s %s' % (full_name, screen_name), guid=permalink, pub_date=pub_date)
         return feed.generate()
