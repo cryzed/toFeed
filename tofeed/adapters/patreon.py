@@ -23,7 +23,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
         self.max_title_length = int(max_title_length)
 
     @staticmethod
-    def _parse_content(soup, element):
+    def _parse_content(element):
         share_content = element.find('div', {'class': 'shareContent'})
         spoon.convert_newlines(share_content)
         return share_content
@@ -48,22 +48,22 @@ class ActivityFeed(tofeed.adapters.Adapter):
         spoon.absolutize_references(self.url, anchor, recursive=False)
         return anchor['href']
 
-    def _parse_note(self, soup, note_soup):
+    def _parse_note(self, note_soup):
         author = self._parse_author(note_soup)
-        content = self._parse_content(soup, note_soup)
+        content = self._parse_content(note_soup)
         date = self._parse_date(note_soup)
         link = self._parse_link(note_soup)
         return link, content, author, date
 
-    def _parse_photo(self, soup, photo_soup):
+    def _parse_photo(self, photo_soup):
         author = self._parse_author(photo_soup)
-        content = self._parse_content(soup, photo_soup)
+        content = self._parse_content(photo_soup)
         image = self._parse_image(photo_soup)
         date = self._parse_date(photo_soup)
         link = self._parse_link(photo_soup)
         return link, content, image, author, date
 
-    def _parse_mylink(self, soup, mylink_soup):
+    def _parse_mylink(self, mylink_soup):
         author = self._parse_author(mylink_soup)
 
         title_anchor = mylink_soup.find('p', {'class': 'title'}).a
@@ -77,7 +77,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
         # Apparently newlines in this section are not even included, so there's
         # no need to convert newlines
         link_description = mylink_soup.find('p', {'class': 'linkDesc'})
-        content = self._parse_content(soup, mylink_soup)
+        content = self._parse_content(mylink_soup)
         date = self._parse_date(mylink_soup)
         return title, link, image, link_description, content, author, date
 
@@ -95,7 +95,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
                 continue
 
             if 'note' in activity['class']:
-                link, content, author, date = self._parse_note(soup, activity)
+                link, content, author, date = self._parse_note(activity)
 
                 # TODO: Possibly stop modifying the soup in the parsing methods
                 # and do it here, this way I wouldn't need to grab the content
@@ -110,7 +110,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
                 feed.add(title, link, unicode(content), author=author, pub_date=date)
 
             elif 'photo' in activity['class']:
-                link, content, image, author, date = self._parse_photo(soup, activity)
+                link, content, image, author, date = self._parse_photo(activity)
 
                 # TODO: Possibly stop modifying the soup in the parsing methods
                 # and do it here, this way I wouldn't need to grab the content
@@ -126,7 +126,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
                 feed.add(title, link, unicode(content), author=author, pub_date=date)
 
             elif 'mylink' in activity['class']:
-                title, link, image, link_description, content, author, date = self._parse_mylink(soup, activity)
+                title, link, image, link_description, content, author, date = self._parse_mylink(activity)
                 content.insert(0, link_description)
                 content.insert(0, image)
                 feed.add(title, link, unicode(content), author=author, pub_date=date)
