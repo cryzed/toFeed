@@ -12,10 +12,10 @@ new_tag = _soup.new_tag
 new_string = _soup.new_string
 
 
-def shorten_to_title(content, length, separator=' ', appendix='...'):
+def shorten_to_title(string, length, separator=' ', appendix='...'):
     """
     Shortens the content to a human readable title. The function searches for
     the last occurrence of separator within the range of the content limited by
     length and appends the appendix.
     """
-    return content[:length].rpartition(separator)[0] + appendix
+    return string[:length].rpartition(separator)[0] + appendix
