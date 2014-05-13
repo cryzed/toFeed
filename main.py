@@ -7,7 +7,7 @@ import tofeed.adapters
 
 
 app = flask.Flask(__name__)
-adapters = tofeed.adapters.get_adapters()
+adapters = tofeed.adapters._get_adapters()
 cache = werkzeug.contrib.cache.SimpleCache()
 cached = {}
 

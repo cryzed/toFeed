@@ -32,7 +32,7 @@ def _is_adapter(object_):
     return Adapter in base_classes
 
 
-def get_adapters():
+def _get_adapters():
     adapters = {}
 
     for _, name, _ in pkgutil.iter_modules(__path__):
