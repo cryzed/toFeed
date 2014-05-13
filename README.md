@@ -1,23 +1,58 @@
-<div align="center">
-<img src="http://i.imgur.com/UBKObTR.png"/>
-<p>toFeed aims to provide syndication feeds for websites that don't.</p>
-</div>
+Introduction
+============
+What toFeed does at its core is scraping websites, converting the gathered data
+into syndication feed formats, such as RSS or Atom, and exposing the generated
+feeds to news aggregators through a web service. It grew out of my desire to be
+able to immediately see news from sites I regularly visit and filter them
+according to my own preferences.
+
+toFeed relies on third-party modules such as [BeautifulSoup], [Jinja2] and
+[Flask] to scrape the websites and generate as well as expose the feeds. Of
+course that doesn't mean that you are limited to these modules, writing your
+own adapters is easy and you are free to use whatever modules you want to do
+so. The decision to use [BeautifulSoup] instead of [lxml.html] was primarily
+made to avoid binary dependencies which would make the package less portable
+and harder to install for end users. Another reason was that I'm simply more
+familiar and comfortable working with [BeautifulSoup].
+
+The documentation can be found here: http://tofeed.readthedocs.org/
+
+
+[BeautifulSoup]: http://www.crummy.com/software/BeautifulSoup/
+[Jinja2]: http://jinja.pocoo.org/
+[Flask]: http://flask.pocoo.org/
+[lxml.html]: http://lxml.de/lxmlhtml.html
+
+
+Usage
+=====
+toFeed is designed to be run either locally on your own PC or on your own web
+server. Simply execute "main.py" and the toFeed service should start running on
+http://127.0.0.1:5000/ and expose the routes to your adapters from there.
+
+If you want to run toFeed on a web server, but don't own one, check out the
+awesome service [Heroku] where you can get one for free.
+
+
+[Heroku]: http://heroku.com/
 
 
 Adapters
---------
+========
+(This will soon be moved into the documentation)
+
 Parameters are passed via GET parameters and used to instantiate the "Adapter"
 class instance. Parameters without a value are interpreted as positional
 arguments, and parameters with a value as a keyword argument.
 
 To write your own adapter you need to create a new module in "toFeed.packages"
-which has a top-level "ROUTE" attribute. This attribute is the first part
-of the route to your actual adapter class. All classes which inherit from the
-base adapter class in this module are automatically recognized. Your class
-needs to provide a static "ROUTE" attribute as well, which is the second part
-of the route to your adapter: for example "twitter/timeline". If the static
-"PRIMARY" attribute in your adapter class is set to true, it will also be
-accessible simply via the module "ROUTE" attribute, i.e. only "twitter".
+which has a top-level "ROUTE" attribute. This attribute is the first part of
+the route to your actual adapter class. All classes which inherit from the base
+adapter class in this module are automatically recognized. Your class needs to
+provide a static "ROUTE" attribute as well, which is the second part of the
+route to your adapter: for example "twitter/timeline". If the static "PRIMARY"
+attribute in your adapter class is set to true, it will also be accessible
+simply via the module "ROUTE" attribute, i.e. only "twitter".
 
 You need to add "\*\*kwargs" to the argument list and call this in your
 constructor:
@@ -36,20 +71,20 @@ Listed below are the currently existing adapters, their routes and the
 parameters they accept:
 
 
-[Patreon](http://patreon.com/):
+[Patreon]:
 
   - patreon?\<username\>
   - patreon/activities?\<username\>
 
-    Turns the activity feed found on Patreon pages into an RSS feed.
-    Currently posts visible to Patreons only are simply skipped due to me
-    not having paid for any projects so far, and thus not being able to write
-    a proper login mechanism.
+    Turns the activity feed found on Patreon pages into an RSS feed. Currently
+    posts visible to Patreons only are simply skipped due to me not having paid
+    for any projects so far, and thus not being able to write a proper login
+    mechanism.
 
     - max_title_length: Defines the maximum length of the title.
 
 
-[Twitter](http://twitter.com/):
+[Twitter]:
 
   - twitter?\<data_widget_id\>
   - twitter/timelineWidget?\<data_widget_id\>
@@ -60,7 +95,7 @@ parameters they accept:
     snippet you are provided.
 
 
-[Picroma](https://picroma.com/)
+[Picroma]:
 
   - picroma
   - picroma/blog
@@ -68,12 +103,6 @@ parameters they accept:
   Simply turns wollay's blog into an RSS feed.
 
 
-Usage
------
-toFeed is designed to be run either locally on your own PC or on your own
-web server. Simply execute "main.py" and the toFeed service should start
-running on http://127.0.0.1:5000/ and expose the routes to your adapters
-from there.
-
-If you want to run toFeed on a web server, but don't own one, check out the
-awesome service [Heroku](http://heroku.com/) where you can get one for free.
+[Patreon]: http://patreon.com/
+[Twitter]: http://twitter.com/
+[Picroma]: https://picroma.com/
