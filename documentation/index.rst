@@ -19,6 +19,11 @@ primarily made to avoid binary dependencies which would make the package less po
 install for end users. Another reason was that I'm simply more familiar and
 comfortable working with `BeautifulSoup`_.
 
+.. _BeautifulSoup: http://www.crummy.com/software/BeautifulSoup/
+.. _Jinja2: http://jinja.pocoo.org/
+.. _Flask: http://flask.pocoo.org/
+.. _lxml.html: http://lxml.de/lxmlhtml.html
+
 
 Usage
 =====
@@ -34,17 +39,10 @@ I recommend using `Heroku`_, which allows you to do so at no cost at all. Simply
 follow their `Getting Started with Python on Heroku`_ guide from the `Declare
 process types with Procfile`_ section onwards.
 
-
-.. _BeautifulSoup: http://www.crummy.com/software/BeautifulSoup/
-.. _Jinja2: http://jinja.pocoo.org/
-.. _Flask: http://flask.pocoo.org/
-.. _lxml.html: http://lxml.de/lxmlhtml.html
 .. _virtualenv: https://pypi.python.org/pypi/virtualenv
+.. _Heroku: https://www.heroku.com/
 .. _Getting Started with Python on Heroku: https://devcenter.heroku.com/articles/getting-started-with-python
 .. _Declare process types with Procfile: https://devcenter.heroku.com/articles/getting-started-with-python#declare-process-types-with-procfile
-
-.. _Heroku: https://www.heroku.com/
-
 
 
 Modules

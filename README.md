@@ -32,15 +32,22 @@ The documentation can be found here: http://tofeed.readthedocs.org/
 
 Usage
 =====
-toFeed is designed to be run either locally on your own PC or on your own web
-server. Simply execute "main.py" and the toFeed service should start running on
-http://127.0.0.1:5000/ and expose the routes to your adapters from there.
+You can either run toFeed locally on your own PC or externally on a server. It
+is recommended to use [virtualenv] in either case.
 
-If you want to run toFeed on a web server, but don't own one, check out the
-awesome service [Heroku] where you can get one for free.
+If you are planning on running toFeed locally, simply execute the main module
+and the toFeed service should start running on your localhost and expose the
+routes to your adapters from there.
+
+Alternatively, if you are interested in setting up an external toFeed instance,
+I recommend using [Heroku], which allows you to do so at no cost at all. Simply
+follow their [Getting Started with Python on Heroku] guide from the [Declare
+process types with Procfile] section onwards.
 
 
 [Heroku]: http://heroku.com/
+[Getting Started with Python on Heroku]: https://devcenter.heroku.com/articles/getting-started-with-python
+[Declare process types with Procfile]: https://devcenter.heroku.com/articles/getting-started-with-python#declare-process-types-with-procfile
 
 
 Adapters
