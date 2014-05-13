@@ -29,13 +29,13 @@ def collapse_tag(tag, joiner=''):
     tag.replace_with(collapsed)
 
 
-def absolutize_references(base_url, soup, attributes=['href', 'src'], recursive=True):
+def absolutize_references(base_url, tag, attributes=['href', 'src'], recursive=True):
     """
     Turns links found within the attributes absolute by using the base_url.
     """
 
     # Include the root element of the soup itself
-    for element in [soup] + soup(recursive=recursive):
+    for element in [tag] + tag(recursive=recursive):
         for attribute in attributes:
             if element.has_attr(attribute):
                 element[attribute] = urlparse.urljoin(base_url, element[attribute])
