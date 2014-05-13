@@ -9,7 +9,7 @@ import tofeed.adapters
 app = flask.Flask(__name__)
 adapters = tofeed.adapters.get_adapters()
 cache = werkzeug.contrib.cache.SimpleCache()
-cached = {}
+cached_at = {}
 
 
 def _split_request_args(request_arguments):
@@ -38,13 +38,13 @@ def index(path):
     # allows caching of different routes leading to the same adapter, for
     # example the primary adapter.
     cache_key = (adapters[path], flask.request.args)
-    if cache_key in cached:
-        if time.time() - cached[cache_key] < instance.cache_timeout:
+    if cache_key in cached_at:
+        if time.time() - cached_at[cache_key] < instance.cache_timeout:
             return cache.get(cache_key)
 
     feed = instance.to_feed()
     cache.set(cache_key, feed)
-    cached[cache_key] = time.time()
+    cached_at[cache_key] = time.time()
     return feed
 
 
