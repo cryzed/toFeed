@@ -34,18 +34,22 @@ def _is_adapter(object_):
 
 def get_adapters():
     """
-    Returns a dict mapping the adapter routes to their respective adapter
-    classes.
+    Returns a dictionary that maps the adapter routes to their respective
+    adapter classes.
     """
     adapters = {}
     for _, name, _ in pkgutil.iter_modules(__path__):
         module = importlib.import_module('.' + name, ADAPTERS_PACKAGE_PATH)
+        primary_adapter_set = False
         for _, adapter in inspect.getmembers(module, _is_adapter):
             # If the adapter is the primary adapter of the module, make it
             # directly accessible only via the module route as well.
-            # TODO: Possibly check for 2 primary adapters and throw an error
             if adapter.PRIMARY:
+                if primary_adapter_set:
+                    raise RuntimeError('There can only be one primary adapter within the same adapter module')
+
                 adapters[module.ROUTE] = adapter
+                primary_adapter_set = True
 
                 # If the adapter is the primary adapter a route is optional
                 if not adapter.ROUTE:
