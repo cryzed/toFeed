@@ -8,14 +8,9 @@ import urlparse
 
 def collapse_tag(soup, tag, joiner=''):
     """
-    Replaces all children with the concatenation, using the given joiner, of
-    their strings. For example:
-
-    <a href="..." some-attribute="hello"><s>@</s><b>username</b></a>
-    would turn into:
-    <a href="..." some-attribute="hello">@username</a>
+    Replaces the tag's children with their strings, concatenated with the
+    joiner.
     """
-
     string = ''.join(tag.strings)
     collapsed = soup.new_tag(tag.name)
     collapsed.attrs = tag.attrs
@@ -23,11 +18,12 @@ def collapse_tag(soup, tag, joiner=''):
     tag.replace_with(collapsed)
 
 
-def absolutize_references(base_url, soup, attributes=['href', 'img'], recursive=True):
+def absolutize_references(base_url, soup, attributes=['href', 'src'], recursive=True):
     """
-    Searches every element of the given soup and if a matching attribute is
-    found, makes the reference absolute.
+    Turns links found within the attributes absolute by using the base_url.
     """
+
+    # Include the root element of the soup itself
     for element in [soup] + soup(recursive=recursive):
         for attribute in attributes:
             if element.has_attr(attribute):
@@ -36,18 +32,17 @@ def absolutize_references(base_url, soup, attributes=['href', 'img'], recursive=
 
 def _copy_tag(soup, tag):
     """
-    Creates a copy of the given tag. This is needed to avoid confusing the
-    BeautifulSoup structure and running into strange errors.
+    Creates a copy of the tag. Needed when trying to insert the same tag
+    multiple times in different locations.
     """
     copy = soup.new_tag(tag.name, **tag.attrs)
-    for content in tag.contents:
-        copy.append(content)
+    map(copy.append, tag.contents)
     return copy
 
 
-def replace_string_with_tag(soup, tag, string, replacement):
+def replace_string_with_tag(soup, tag, string, replacement, recursive=True):
     """
-    Replaces all occurrences of the string in the given tag's strings with the
+    Replaces all occurrences of string within the tag's strings with the
     replacement.
     """
     not_processed = [tag]
@@ -68,16 +63,18 @@ def replace_string_with_tag(soup, tag, string, replacement):
                     contents.append(_copy_tag(soup, replacement))
             else:
                 contents.append(content)
-                not_processed.append(content)
+
+                # If recursive, process discovered tags
+                if recursive:
+                    not_processed.append(content)
 
         tag.clear()
-        for content in contents:
-            tag.append(content)
+        map(tag.append, contents)
 
 
-def convert_newlines(soup, tag):
+def convert_newlines(soup, tag, recursive=True):
     """
-    Converts newline characters found in the tag's strings into <br/> tags.
+    Replaces newline characters found in the tag's strings break line tags.
     """
     br_tag = soup.new_tag('br')
-    replace_string_with_tag(soup, tag, '\n', br_tag)
+    replace_string_with_tag(soup, tag, '\n', br_tag, recursive)
