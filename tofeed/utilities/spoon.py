@@ -1,5 +1,5 @@
 """
-Helper classes for BeautifulSoup objects.
+Helper functions for BeautifulSoup objects.
 """
 
 import bs4
