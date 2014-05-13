@@ -17,10 +17,9 @@ new_tag = _soup.new_tag
 new_string = _soup.new_string
 
 
-def collapse_tag(tag, joiner=''):
+def collapse_tag(tag):
     """
-    Replaces the tag's children with their strings, concatenated with the
-    joiner.
+    Replaces the tag's children with their strings.
     """
     string = ''.join(tag.strings)
     collapsed = new_tag(tag.name)
