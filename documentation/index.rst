@@ -47,8 +47,8 @@ process types with Procfile`_ section onwards.
 
 
 
-Documentation
-=============
+Modules
+=======
 .. toctree::
    :maxdepth: 2
 
