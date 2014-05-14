@@ -19,7 +19,7 @@ new_string = _soup.new_string
 
 def collapse_tag(tag):
     """
-    Replaces the tag's children with their string contents.
+    Replaces the tag's descendents with their strings.
 
     :param bs4.element.Tag tag: The tag to collapse.
     """
@@ -32,6 +32,8 @@ def collapse_tag(tag):
 
 def absolutize_references(base_url, tag, attributes=['href', 'src'], recursive=True):
     """
+    Turns references found within the tag's attributes absolute.
+
     :param str base_url: The base URL used to absolutize the references
     :param bs4.element.Tag tag: The tag to absolutize references in
     :param list attributes: The attributes containing the URLs that should be
@@ -60,13 +62,13 @@ def _copy_tag(tag):
 
 def replace_string_with_tag(tag, string, replacement, recursive=True):
     """
+    Replaces all occurrences of string within the tag's strings with the
+    replacement tag.
+
     :param bs4.element.Tag tag: The tag to replace strings in
     :param str string: The string to replace
     :param str bs4.element.Tag replacement: The tag replacing the string
     :param bool recursive:
-
-    Replaces all occurrences of string within the tag's strings with the
-    replacement.
     """
     not_processed = [tag]
     while not_processed:
