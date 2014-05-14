@@ -9,7 +9,7 @@ def shorten_to_title(string, length, separator=' ', appendix='...'):
     :param str string: The string to create the title out of
     :param int length: The approximate length of the title. The length is only
         approximate to this value, because it's possible that the next separator
-        character encountered may lie further ahead.
+        string encountered may lie further ahead.
     :param str separator: The character that separates words in the text.
         Usually of course a space, this should only have to be changed in very
         rare cases.
