@@ -11,8 +11,9 @@ import tofeed.utilities.spoon as spoon
 
 
 class Blog(tofeed.adapters.Adapter):
-    PRIMARY = True
     ROUTE = 'blog'
+    PRIMARY = True
+    
     URL = 'https://picroma.com/'
     DATETIME_FORMAT = '%m/%d/%Y %H:%M:%S %p'
 

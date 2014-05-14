@@ -14,6 +14,7 @@ import tofeed.utilities.spoon as spoon
 class ActivityFeed(tofeed.adapters.Adapter):
     ROUTE = 'activities'
     PRIMARY = True
+    
     URL_TEMPLATE = 'http://www.patreon.com/%s&ty=a'
     DATE_FORMAT = '%B %d, %Y %H:%M:%S'
 

@@ -12,8 +12,9 @@ import tofeed.utilities.spoon as spoon
 
 
 class TimelineWidget(tofeed.adapters.Adapter):
-    PRIMARY = True
     ROUTE = 'timelineWidget'
+    PRIMARY = True
+    
     URL_TEMPLATE = 'http://cdn.syndication.twimg.com/widgets/timelines/%s'
     DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S+0000'
 
