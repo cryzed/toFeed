@@ -8,18 +8,20 @@ import urlparse
 
 _soup = bs4.BeautifulSoup()
 
-#: Shortcut for BeautifulSoup().new_tag. This allows using the bound methods
+#: Shortcut for :func:`BeautifulSoup.new_tag`. This allows using the bound methods
 #: of the BeautifulSoup class without having to instantiate it manually.
 new_tag = _soup.new_tag
 
-#: Shortcut for BeautifulSoup().new_string. This allows using the bound methods
+#: Shortcut for :func:`BeautifulSoup.new_string`. This allows using the bound methods
 #: of the BeautifulSoup class without having to instantiate it manually.
 new_string = _soup.new_string
 
 
 def collapse_tag(tag):
     """
-    Replaces the tag's children with their strings.
+    Replaces the tag's children with their string contents.
+
+    :param bs4.element.Tag tag: The tag to collapse.
     """
     string = ''.join(tag.strings)
     collapsed = new_tag(tag.name)
@@ -30,10 +32,16 @@ def collapse_tag(tag):
 
 def absolutize_references(base_url, tag, attributes=['href', 'src'], recursive=True):
     """
-    Turns links found within the attributes absolute by using the base_url.
+    :param str base_url: The base URL used to absolutize the references
+    :param bs4.element.Tag tag: The tag to absolutize references in
+    :param list attributes: The attributes containing the URLs that should be
+        made absolute
+    :param bool recursive: If ``True`` the tag and all its sub tags will be
+        searched, else only the tag and its direct descendents will be
+        searched.
     """
 
-    # Include the root element of the soup itself
+    # Include the tag itself
     for element in [tag] + tag(recursive=recursive):
         for attribute in attributes:
             if element.has_attr(attribute):
@@ -52,6 +60,11 @@ def _copy_tag(tag):
 
 def replace_string_with_tag(tag, string, replacement, recursive=True):
     """
+    :param bs4.element.Tag tag: The tag to replace strings in
+    :param str string: The string to replace
+    :param str bs4.element.Tag replacement: The tag replacing the string
+    :param bool recursive:
+
     Replaces all occurrences of string within the tag's strings with the
     replacement.
     """
@@ -84,7 +97,12 @@ def replace_string_with_tag(tag, string, replacement, recursive=True):
 
 def convert_newlines(tag, recursive=True):
     """
-    Replaces newline characters found in the tag's strings break line tags.
+    Replaces newline characters found in the tag's strings with line break tags.
+
+    :param bs4.element.Tag tag: The tag to convert newline characters in.
+    :param bool recursive: If ``True`` the tag and all its sub tags will be
+        searched, else only the tag and its direct descendents will be
+        searched.
     """
     br_tag = new_tag('br')
     replace_string_with_tag(tag, '\n', br_tag, recursive)
