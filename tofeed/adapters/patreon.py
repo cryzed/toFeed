@@ -109,7 +109,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
 
             title, link, contents, author, date = self._parse_activity(activity)
             main_element = contents[-1]
-            if any((klass in activity['class'] for klass in ('note', 'photo'))):
+            if 'note' in activity['class'] or 'photo' in activity['class']:
                 content_string = ' '.join(main_element.stripped_strings)
                 if self.max_title_length >= len(content_string):
                     title = content_string
