@@ -52,7 +52,6 @@ Modules
    :titlesonly:
 
    adapters
-   formats
    utilities
 
 

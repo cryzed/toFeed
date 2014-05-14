@@ -1,10 +1,3 @@
-"""
-Spoon
-~~~~~
-
-Helper functions for BeautifulSoup objects.
-"""
-
 import bs4
 import urlparse
 
