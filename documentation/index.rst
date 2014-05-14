@@ -1,4 +1,5 @@
 .. image:: _static/logo.png
+
 toFeed aims to provide syndication feeds for websites that don't.
 
 
@@ -48,7 +49,7 @@ process types with Procfile`_ section onwards.
 Modules
 =======
 .. toctree::
-   :maxdepth: 2
+   :titlesonly:
 
    adapters
    formats

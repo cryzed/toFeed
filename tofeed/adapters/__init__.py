@@ -1,3 +1,37 @@
+"""
+Adapters
+~~~~~~~~
+
+.. TODO: Still needs to rewritten and converted to reST.
+
+.. code-block:: none
+
+    Parameters are passed via GET parameters and used to instantiate the "Adapter"
+    class instance. Parameters without a value are interpreted as positional
+    arguments, and parameters with a value as a keyword argument.
+
+    To write your own adapter you need to create a new module in "toFeed.packages"
+    which has a top-level "ROUTE" attribute. This attribute is the first part of
+    the route to your actual adapter class. All classes which inherit from the base
+    adapter class in this module are automatically recognized. Your class needs to
+    provide a static "ROUTE" attribute as well, which is the second part of the
+    route to your adapter: for example "twitter/timeline". If the static "PRIMARY"
+    attribute in your adapter class is set to true, it will also be accessible
+    simply via the module "ROUTE" attribute, i.e. only "twitter".
+
+    You need to add "\*\*kwargs" to the argument list and call this in your
+    constructor:
+
+        Adapter.__init__(self, **kwargs)
+
+    All positional and keyword arguments you define before "\*\*kwargs" in your
+    constructor can be passed via the GET parameters. The "to_feed"-method needs to
+    be overriden and return a valid feed syndication format with your content. The
+    included Python packages in "toFeed.formats" can be used to do that.
+
+    To get a better idea, simply take a look at the already existing adapters.
+"""
+
 import pkgutil
 import inspect
 import importlib

@@ -1,3 +1,9 @@
+"""
+Utilities
+~~~~~~~~~
+"""
+
+
 def shorten_to_title(string, length, separator=' ', appendix='...'):
     """
     Use the string to create a human readable title.

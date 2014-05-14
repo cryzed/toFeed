@@ -1,4 +1,7 @@
 """
+Spoon
+~~~~~
+
 Helper functions for BeautifulSoup objects.
 """
 

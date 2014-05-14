@@ -1,3 +1,8 @@
+"""
+RSS
+~~~
+"""
+
 import datetime
 import xml.sax.saxutils
 

@@ -1,8 +1,5 @@
-Formats
-=======
+.. automodule:: tofeed.formats
+   :members:
 
-
-RSS
----
 .. automodule:: tofeed.formats.rss
    :members:
