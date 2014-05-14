@@ -1,6 +1,6 @@
 ROUTE = 'twitter'
 
-import datetime
+from datetime import datetime
 import json
 import urllib2
 
@@ -29,13 +29,11 @@ class TimelineWidget(tofeed.adapters.Adapter):
         element = soup.find('a', {'class': 'customisable-highlight'})
         title = element['title']
         link = element['href']
-
-        now = datetime.datetime.now()
+        now = datetime.now()
         feed = tofeed.formats.rss.Channel(title, link, title, pub_date=now, last_build_date=now)
-
         for tweet in soup('li', {'class': 'tweet'}):
             permalink = tweet.find('a', {'class': 'permalink'})['href']
-            pub_date = datetime.datetime.strptime(tweet.find('time')['datetime'], self.DATETIME_FORMAT)
+            pub_date = datetime.strptime(tweet.find('time')['datetime'], self.DATETIME_FORMAT)
 
             profile_strings = list(tweet.find('a', {'class': 'profile'}).stripped_strings)
             full_name = profile_strings[0]

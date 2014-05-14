@@ -6,9 +6,9 @@ import urllib2
 import bs4
 
 import tofeed.adapters
-import tofeed.utilities.spoon as spoon
 import tofeed.formats.rss
 import tofeed.utilities
+import tofeed.utilities.spoon as spoon
 
 
 class ActivityFeed(tofeed.adapters.Adapter):
@@ -88,8 +88,8 @@ class ActivityFeed(tofeed.adapters.Adapter):
         title = soup.title.string
         now = datetime.now()
         feed = tofeed.formats.rss.Channel(title, self.url, title, pub_date=now, last_build_date=now)
-
         for activity in soup.find('div', id='boxGrid')('div', recursive=False):
+            # Ignore for patreon members only activities
             prv = activity.get('prv')
             if prv is None or prv in ['1', '100']:
                 continue
@@ -130,5 +130,4 @@ class ActivityFeed(tofeed.adapters.Adapter):
                 content.insert(0, link_description)
                 content.insert(0, image)
                 feed.add(title, link, unicode(content), author=author, pub_date=date)
-
         return feed.generate()
