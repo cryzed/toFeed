@@ -21,7 +21,7 @@ class Blog(tofeed.adapters.Adapter):
 
     def to_feed(self):
         response = urllib2.urlopen(self.URL)
-        soup = bs4.BeautifulSoup(response)
+        soup = bs4.BeautifulSoup(response, 'html.parser')
 
         now = datetime.datetime.now()
         title = soup.title.string

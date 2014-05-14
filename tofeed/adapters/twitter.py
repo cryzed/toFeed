@@ -24,7 +24,7 @@ class TimelineWidget(tofeed.adapters.Adapter):
     def to_feed(self):
         response = urllib2.urlopen(self.url)
         data = json.load(response)
-        soup = bs4.BeautifulSoup(data['body'])
+        soup = bs4.BeautifulSoup(data['body'], 'html.parser')
 
         element = soup.find('a', {'class': 'customisable-highlight'})
         title = element['title']

@@ -83,7 +83,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
 
     def to_feed(self):
         response = urllib2.urlopen(self.url)
-        soup = bs4.BeautifulSoup(response)
+        soup = bs4.BeautifulSoup(response, 'html.parser')
 
         title = soup.title.string
         now = datetime.now()
