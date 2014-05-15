@@ -14,9 +14,13 @@ cached_at = {}
 
 def _split_request_args(request_arguments):
     """
-    :parameter request_arguments: The flask request arguments
-    :returns: The request arguments split into positional arguments and keyword
-        arguments.
+    Splits Flask request argument into positional and keyword arguments.
+
+    :parameter request_arguments:
+        The flask request arguments
+
+    :returns:
+        The split arguments
     """
     arguments = []
     keyword_arguments = {}

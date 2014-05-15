@@ -20,11 +20,13 @@ class Adapter(object):
         The default time to cache the content returned by the adapter's
         implementation of :meth:`to_feed`.
 
-    :Note: Parameters received by the constructor are strings and must be
-        handled accordingly.
+    :Note:
+        Parameters received by the constructor are strings and must be handled
+        accordingly.
 
-    :parameter str cache_timeout: The time to cache the content returned by the
-        adapter's implementation of :meth:`to_feed`.
+    :parameter str cache_timeout:
+        The time to cache the content returned by the adapter's implementation
+        of :meth:`to_feed`.
     """
     ROUTE = None
     PRIMARY = False
@@ -41,7 +43,8 @@ class Adapter(object):
         Must be implemented by the inheriting adapter.
 
         :rtype: str
-        :returns: The generated feed content.
+        :returns:
+            The generated feed content.
         """
         raise NotImplementedError('The adapter must implement the "to_feed" method')
 
@@ -49,7 +52,8 @@ class Adapter(object):
 def _is_adapter(object_):
     """
     :rtype: bool
-    :returns: ``True`` if ``object_`` inherits from :class:`Adapter`.
+    :returns:
+        True if ``object_`` inherits from :class:`Adapter`.
     """
     if not inspect.isclass(object_):
         return False
@@ -66,7 +70,8 @@ def _is_adapter(object_):
 def _get_adapters():
     """
     :rtype: dict
-    :returns: Mapping of the adapter classes to their routes.
+    :returns:
+        Mapping of the adapter classes to their routes.
     """
     adapters = {}
     for _, module_name, _ in pkgutil.iter_modules(__path__):
