@@ -41,6 +41,8 @@ class ActivityFeed(tofeed.adapters.Adapter):
 
     def _scrape_image(self, element):
         image_popup = element.find('a', {'class': 'imagePopup'})
+        if not image_popup:
+            print element
         spoon.absolutize_references(self.url, image_popup, recursive=False)
         return image_popup
 
@@ -105,7 +107,7 @@ class ActivityFeed(tofeed.adapters.Adapter):
         for activity in soup.find('div', id='boxGrid')('div', recursive=False):
             # Ignore for patreon members only activities
             prv = activity.get('prv')
-            if prv is None or prv in ['1', '100']:
+            if prv is None or int(prv) > 0:
                 continue
 
             title, link, contents, author, date = self._scrape_activity(activity)
