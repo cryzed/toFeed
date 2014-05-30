@@ -15,7 +15,7 @@ new_string = _soup.new_string
 
 def collapse_tag(tag):
     """
-    Replaces the tag's descendents with their strings.
+    Replaces the tag's descendants with their strings.
 
     :param bs4.element.Tag tag:
         The tag to collapse.
@@ -42,7 +42,7 @@ def absolutize_references(base_url, tag, attributes=['href', 'src'], recursive=T
 
     :param bool recursive:
         If true the tag and all its sub tags will be searched, else only the tag
-        and its direct descendents will be searched.
+        and its direct descendants will be searched.
     """
 
     # Include the tag itself
@@ -85,7 +85,7 @@ def replace_string_with_tag(tag, string, replacement, recursive=True):
 
     :param bool recursive:
         If true the tag and all its sub tags will be searched, else only the tag
-        and its direct descendents will be searched.
+        and its direct descendants will be searched.
     """
     not_processed = [tag]
     while not_processed:
@@ -123,7 +123,7 @@ def convert_newlines(tag, recursive=True):
 
     :param bool recursive:
         If true the tag and all its sub tags will be searched, else only the tag
-        and its direct descendents will be searched.
+        and its direct descendants will be searched.
     """
     br_tag = new_tag('br')
     replace_string_with_tag(tag, '\n', br_tag, recursive)
